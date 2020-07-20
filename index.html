@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            font-weight: normal;
+            list-style: none;
+            color: rgb(4, 51, 53);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window">
+
+    </div>
+
+
+    <script src="aniMath.js"></script>
+    <!-- <script src="wheel.js"></script> -->
+    <script src="wheel copy.js"></script>
+    <script>
+        // wheel(".window", {
+        //     imgs: ["img/1.jpg", "img/2.jpg", "img/3.jpg"],
+        //     links: ["http://baidu.com", "http://sxeku.com", "http://baidu.com"],
+        //     imgColor: ["rgb(232,232,232)", "rgb(247,75,28)", "rgb(243,78,19)"],
+        //     imgSize: [1130, 500],
+        //     btnColor: "cadetblue",
+        //     btnActive: "rgb(4, 51, 53)",
+        //     btnWidth: 100,
+        //     btnHeight: 10,
+        //     btnMargin: 20,
+        //     btnPos: ["center", "10"]
+        // }, {
+        //     eachTime: 0.5,
+        //     time: 2,
+        //     runStyle: "in"
+        // });
+        new wheel(".window", {
+            imgs: ["img/1.jpg", "img/2.jpg", "img/3.jpg"],
+            links: ["http://baidu.com", "http://sxeku.com", "http://baidu.com"],
+            imgColor: ["rgb(232,232,232)", "rgb(247,75,28)", "rgb(243,78,19)"],
+            imgSize: [1130, 500],
+            btnColor: "cadetblue",
+            btnActive: "rgb(4, 51, 53)",
+            btnWidth: 100,
+            btnHeight: 5,
+            btnMargin: 20,
+            btnPos: ["center", "10"]
+        }, {
+            eachTime: 0.5,
+            time: 3,
+            runStyle: "in"
+        });
+    </script>
+</body>
+
+</html>
