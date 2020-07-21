@@ -12,7 +12,7 @@ function wheel(wins, opts, runOpts) {
     // 轮播
     this.autoRun();
     //点击播放
-    //this.clickRun();
+    this.clickRun();
 
 }
 
@@ -142,68 +142,130 @@ wheel.prototype = {
         this.wins.appendChild(btnBox);
         console.log(this.btns);
     },
-
-    autoRun() {
-
-        var winW = parseInt(getComputedStyle(this.wins, null).width);
-        var num = 0;
-        var boxexp = this.box;
-        var eachTimeExp = this.eachTime;
-        var runStyleExp = this.runStyle;
-        var btnsExp = this.btns;
-        var btnColorExp = this.btnColor;
-        var btnActiveExp = this.btnActive;
-        var timeExp = this.time;
-        //运动函数
-        //运动函数
-        function move() {
-            //每次轮播加一次
-            console.log(num);
-            num++
+    _setval() {
+        this._winW = parseInt(getComputedStyle(this.wins, null).width);
+        this._num = 0;
+        this._t = 0;
+    },
+    _move() {
+        var that = this;
+        //每次轮播加一次
+        return function () {
+            that._num++
             //运动到最后一张的处
-            if (num > btnsExp.length - 1) {
-                animate(boxexp, {
-                    "margin-left": -num * winW
-                }, eachTimeExp, runStyleExp, function () {
-                    boxexp.style.marginLeft = 0;
+            if (that._num > that.btns.length - 1) {
+                animate(that.box, {
+                    "margin-left": -that._num * that._winW
+                }, that.eachTime, that.runStyle, function () {
+                    that.box.style.marginLeft = 0;
                 });
                 //位置回拨到第一张
-                num = 0; //js特性 单线程异步机制语言
+                that._num = 0; //js特性 单线程异步机制语言
                 // 用js单线程实现多线程 
             } else {
-                animate(boxexp, {
-                    "margin-left": -num * winW
-                }, eachTimeExp, runStyleExp);
+                animate(that.box, {
+                    "margin-left": -that._num * that._winW
+                }, that.eachTime, that.runStyle);
             }
             //轮播按钮的变化
-            for (var i = 0; i < btnsExp.length; i++) {
-                btnsExp[i].style.backgroundColor = btnColorExp;
+            for (var i = 0; i < that.btns.length; i++) {
+                that.btns[i].style.backgroundColor = that.btnColor;
             }
-            btnsExp[num].style.backgroundColor = btnActiveExp;
+            that.btns[that._num].style.backgroundColor = that.btnActive;
         }
-        //
-        var t = setInterval(move, timeExp);
 
-        for (let i = 0; i < btnsExp.length; i++) {
-            btnsExp[i].onclick = function () {
-                num = i;
-                animate(boxexp, {
-                    "margin-left": -num * winW
-                }, eachTimeExp, runStyleExp);
-                for (var j = 0; j < btnsExp.length; j++) {
-                    btnsExp[j].style.backgroundColor = btnColorExp;
-                }
-                btnsExp[num].style.backgroundColor = btnActiveExp;
-            }
-        }
+
+    },
+    autoRun() {
+        this._setval();
+
+        this.t = setInterval(this._move.call(this), this.time);
+
+        // var winW = parseInt(getComputedStyle(this.wins, null).width);
+        // var num = 0;
+        // var boxexp = this.box;
+        // var eachTimeExp = this.eachTime;
+        // var runStyleExp = this.runStyle;
+        // var btnsExp = this.btns;
+        // var btnColorExp = this.btnColor;
+        // var btnActiveExp = this.btnActive;
+        // var timeExp = this.time;
+        // //运动函数
+        // //运动函数
+        // function move() {
+        //     //每次轮播加一次
+        //     console.log(num);
+        //     num++
+        //     //运动到最后一张的处
+        //     if (num > btnsExp.length - 1) {
+        //         animate(boxexp, {
+        //             "margin-left": -num * winW
+        //         }, eachTimeExp, runStyleExp, function () {
+        //             boxexp.style.marginLeft = 0;
+        //         });
+        //         //位置回拨到第一张
+        //         num = 0; //js特性 单线程异步机制语言
+        //         // 用js单线程实现多线程 
+        //     } else {
+        //         animate(boxexp, {
+        //             "margin-left": -num * winW
+        //         }, eachTimeExp, runStyleExp);
+        //     }
+        //     //轮播按钮的变化
+        //     for (var i = 0; i < btnsExp.length; i++) {
+        //         btnsExp[i].style.backgroundColor = btnColorExp;
+        //     }
+        //     btnsExp[num].style.backgroundColor = btnActiveExp;
+        // }
+        // //
+        // var t = setInterval(move, timeExp);
+
+        // for (let i = 0; i < btnsExp.length; i++) {
+        //     btnsExp[i].onclick = function () {
+        //         num = i;
+        //         animate(boxexp, {
+        //             "margin-left": -num * winW
+        //         }, eachTimeExp, runStyleExp);
+        //         for (var j = 0; j < btnsExp.length; j++) {
+        //             btnsExp[j].style.backgroundColor = btnColorExp;
+        //         }
+        //         btnsExp[num].style.backgroundColor = btnActiveExp;
+        //     }
+        // }
+
+        // //鼠标的移入 时间里面最复杂的一个事件
+        // this.wins.onmouseover = function () {
+        //     clearInterval(t);
+        // }
+        // this.wins.onmouseout = function () {
+        //     t = setInterval(move, timeExp);
+        // }
+    },
+    clickRun() {
+
+        var that = this;
 
         //鼠标的移入 时间里面最复杂的一个事件
         this.wins.onmouseover = function () {
-            clearInterval(t);
+            clearInterval(that.t);
         }
         this.wins.onmouseout = function () {
-            t = setInterval(move, timeExp);
+            that.t = setInterval(that._move.call(that), that.time);
         }
+
+        for (let i = 0; i < this.btns.length; i++) {
+            this.btns[i].onclick = function () {
+                that._num = i;
+                animate(that.box, {
+                    "margin-left": -that._num * that._winW
+                }, that.eachTime, that.runStyle);
+                for (var j = 0; j < that.btns.length; j++) {
+                    that.btns[j].style.backgroundColor = that.btnColor;
+                }
+                that.btns[that._num].style.backgroundColor = that.btnActive;
+            }
+        }
+
+
     }
 }
-// clickRun() {}
